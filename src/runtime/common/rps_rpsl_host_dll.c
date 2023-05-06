@@ -98,9 +98,9 @@ void ___rpsl_abort(uint32_t result)
 }
 
 uint32_t ___rpsl_node_call(
-    uint32_t nodeDeclId, uint32_t numArgs, void** ppArgs, uint32_t nodeCallFlags, uint32_t nodeId)
+    uint32_t nodeDeclId, uint32_t numArgs, uint8_t** ppArgs, uint32_t nodeCallFlags, uint32_t nodeId)
 {
-    return (*s_rpslRuntimeProcs.pfn_rpsl_node_call)(nodeDeclId, numArgs, ppArgs, nodeCallFlags, nodeId);
+    return (*s_rpslRuntimeProcs.pfn_rpsl_node_call)(nodeDeclId, numArgs, (void**)ppArgs, nodeCallFlags, nodeId);
 }
 
 void ___rpsl_node_dependencies(uint32_t numDeps, const uint32_t* pDeps, uint32_t dstNodeId)
@@ -124,9 +124,9 @@ void ___rpsl_scheduler_marker(uint32_t opCode, uint32_t flags, const char* name,
     (*s_rpslRuntimeProcs.pfn_rpsl_scheduler_marker)(opCode, flags, name, nameLength);
 }
 
-void ___rpsl_describe_handle(void* pOutData, uint32_t dataSize, uint32_t* inHandle, uint32_t describeOp)
+void ___rpsl_describe_handle(uint8_t* pOutData, uint32_t dataSize, uint32_t* inHandle, uint32_t describeOp)
 {
-    (*s_rpslRuntimeProcs.pfn_rpsl_describe_handle)( pOutData, dataSize, inHandle, describeOp);
+    (*s_rpslRuntimeProcs.pfn_rpsl_describe_handle)( (void*)pOutData, dataSize, inHandle, describeOp);
 }
 
 uint32_t ___rpsl_create_resource(uint32_t type,
@@ -145,7 +145,7 @@ uint32_t ___rpsl_create_resource(uint32_t type,
         type, flags, format, width, height, depthOrArraySize, mipLevels, sampleCount, sampleQuality, temporalLayers, id);
 }
 
-void ___rpsl_name_resource(uint32_t resourceHdl, const char* name, uint32_t nameLength)
+void ___rpsl_name_resource(uint32_t resourceHdl, unsigned char* name, uint32_t nameLength)
 {
     (*s_rpslRuntimeProcs.pfn_rpsl_name_resource)(resourceHdl, name, nameLength);
 }
@@ -190,7 +190,7 @@ uint8_t ___rpsl_dxop_isSpecialFloat_f32(uint32_t op, float a)
     return (*s_rpslRuntimeProcs.pfn_rpsl_dxop_isSpecialFloat_f32)(op, a);
 }
 
-int __declspec(dllexport) ___rps_dyn_lib_init(const ___rpsl_runtime_procs* pProcs, uint32_t sizeofProcs)
+int ___rps_dyn_lib_init(const ___rpsl_runtime_procs* pProcs, uint32_t sizeofProcs)
 {
     if (sizeof(___rpsl_runtime_procs) != sizeofProcs)
     {
